@@ -8,7 +8,7 @@ export default function DeleteBooking() {
   const params = useParams();
   const router = useRouter();
   const { toast } = useToast();
-  const [booking, setBooking] = useState(null);
+  const [booking, setBooking] = useState({ full_name: '', document_number: '', document_type: '', phone: '', email: '', service_name: '', booking_date: '' });
 
   useEffect(() => {
     if (params.id) {

@@ -6,7 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { SelectItem } from '@radix-ui/react-select';
-import { services } from '@/data/services';
+import { services } from '@/app/services/page';
 
 interface Booking {
   id: number;
@@ -16,6 +16,7 @@ interface Booking {
   phone: string;
   email: string;
   service_id: string;
+  service_name: string,
 }
 
 // Definir los tipos de documento disponibles
@@ -41,7 +42,8 @@ export default function UpdateBooking({ initialServiceId }: CreateBookingProps) 
     full_name: '',
     phone: '',
     email: '',
-    service_id: initialServiceId?.toString() || ''
+    service_id: initialServiceId?.toString() || '',
+    service_name: '',
   });
 
   // Función para obtener el label del tipo de documento
@@ -53,7 +55,7 @@ export default function UpdateBooking({ initialServiceId }: CreateBookingProps) 
   // Función para obtener el nombre del servicio
   const getServiceName = (serviceId: string) => {
     const service = services.find(s => s.id.toString() === serviceId);
-    return service ? `${service.name} - ${service.price}` : 'Seleccionar servicio';
+    return service ? `${service.title} - ${service.price}` : 'Seleccionar servicio';
   };
 
   useEffect(() => {
@@ -78,7 +80,8 @@ export default function UpdateBooking({ initialServiceId }: CreateBookingProps) 
           full_name: bookingData.full_name || '',
           phone: bookingData.phone || '',
           email: bookingData.email || '',
-          service_id: bookingData.service_id?.toString() || ''
+          service_id: bookingData.service_id?.toString() || '',
+          service_name: bookingData.service_name || '',
         });
       } catch (error) {
         console.error('Error fetching booking:', error);
@@ -196,7 +199,14 @@ export default function UpdateBooking({ initialServiceId }: CreateBookingProps) 
 
           <Select
             value={formData.service_id}
-            onValueChange={(value) => handleInputChange('service_id', value)}
+            onValueChange={(value) => {
+              const selectedService = services.find((s) => s.id.toString() === value);
+              setFormData({
+                ...formData,
+                service_id: value,
+                service_name: selectedService?.title || '',
+              });
+            }}
           >
             <SelectTrigger>
               <SelectValue>
@@ -206,7 +216,7 @@ export default function UpdateBooking({ initialServiceId }: CreateBookingProps) 
             <SelectContent>
               {services.map((service) => (
                 <SelectItem key={service.id} value={service.id.toString()}>
-                  {service.name} - {service.price}
+                  {service.title} - {service.price}
                 </SelectItem>
               ))}
             </SelectContent>

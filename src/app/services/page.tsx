@@ -21,7 +21,7 @@ interface Service {
   icon: React.ReactNode;
 }
 
-const services: Service[] = [
+export const services: Service[] = [
   {
     id: 1,
     title: "Habitación Estándar",
@@ -31,21 +31,21 @@ const services: Service[] = [
   },
   {
     id: 2,
-    title: "Restaurante",
+    title: "Servicio de Restaurante",
     description: "Disfrute de nuestra cocina local e internacional con los mejores ingredientes frescos.",
     price: "Desde 35.000 COP",
     icon: <Utensils className="h-8 w-8" />
   },
   {
     id: 3,
-    title: "Gimnasio",
+    title: "Acceso a Gimnasio",
     description: "Mantenga su rutina de ejercicios en nuestro gimnasio completamente equipado.",
     price: "Incluido para huéspedes",
     icon: <Dumbbell className="h-8 w-8" />
   },
   {
     id: 4,
-    title: "Spa",
+    title: "Servicio de Spa",
     description: "Relájese con nuestros tratamientos de spa y masajes terapéuticos.",
     price: "Desde 120.000 COP",
     icon: <Bath className="h-8 w-8" />
@@ -54,6 +54,11 @@ const services: Service[] = [
 
 export default function ServicesPage() {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleBookingSuccess = () => {
+    setIsDialogOpen(false);
+  };
 
   return (
     <div className="container mx-auto py-8">
@@ -61,7 +66,7 @@ export default function ServicesPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {services.map((service) => (
-          <Dialog key={service.id}>
+          <Dialog key={service.id} open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Card className="cursor-pointer hover:shadow-lg transition-shadow">
                 <CardHeader>
@@ -88,7 +93,7 @@ export default function ServicesPage() {
               <DialogHeader>
                 <DialogTitle>Reservar {service.title}</DialogTitle>
               </DialogHeader>
-              <CreateBooking initialServiceId={service.id} />
+              <CreateBooking initialServiceId={service.id} initialServiceName={service.title} onBookingSuccess={handleBookingSuccess} />
             </DialogContent>
           </Dialog>
         ))}

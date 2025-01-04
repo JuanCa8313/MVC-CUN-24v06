@@ -1,16 +1,33 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { images } from "@/data/images";
+import Image from "next/image";
 
 export default function AboutPage() {
-  const images = [
-    "/api/placeholder/800/400",
-    "/api/placeholder/800/400",
-    "/api/placeholder/800/400"
-  ];
 
   return (
     <div className="container mx-auto px-4 py-12">
       <h1 className="text-4xl font-bold text-center mb-8">Quiénes Somos</h1>
+
+      <div className="mb-12">
+        <Carousel>
+          <CarouselContent>
+            {images.map(({ src }, index) => (
+              <CarouselItem key={index}>
+                <div className="p-1">
+                  <Card>
+                    <CardContent className="flex items-center justify-center p-4">
+                      <Image height={400} width={400} src={src} alt={`Slide ${index + 1}`} className="rounded-lg" />
+                    </CardContent>
+                  </Card>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
+      </div>
 
       <Card className="mb-8">
         <CardHeader>

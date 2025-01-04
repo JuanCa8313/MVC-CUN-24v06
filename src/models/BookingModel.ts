@@ -22,7 +22,7 @@ export const BookingModel = {
   },
 
   async getBookingById(id: number) {
-    const [rows] = await pool.query(
+    const [rows]: any = await pool.query(
       'SELECT * FROM bookings WHERE id = ?',
       [id]
     );
@@ -31,8 +31,8 @@ export const BookingModel = {
 
   async createBooking(booking: Omit<Booking, 'id' | 'booking_date'>) {
     const [result] = await pool.query(
-      'INSERT INTO bookings (document_number, document_type, full_name, phone, email, service_id) VALUES (?, ?, ?, ?, ?, ?)',
-      [booking.document_number, booking.document_type, booking.full_name, booking.phone, booking.email, booking.service_id]
+      'INSERT INTO bookings (document_number, document_type, full_name, phone, email, service_id, service_name) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [booking.document_number, booking.document_type, booking.full_name, booking.phone, booking.email, booking.service_id, booking.service_name]
     );
     return result;
   },

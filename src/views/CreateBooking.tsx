@@ -11,13 +11,15 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { services } from '@/data/services';
+import { services } from '@/app/services/page';
 
 interface CreateBookingProps {
   initialServiceId?: number;
+  initialServiceName?: string;
+  onBookingSuccess?: () => void;
 }
 
-export default function CreateBooking({ initialServiceId }: CreateBookingProps) {
+export default function CreateBooking({ initialServiceId, initialServiceName, onBookingSuccess }: CreateBookingProps) {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     document_type: 'CC',
@@ -25,7 +27,9 @@ export default function CreateBooking({ initialServiceId }: CreateBookingProps) 
     full_name: '',
     phone: '',
     email: '',
-    service_id: initialServiceId?.toString() || ''
+    service_id: initialServiceId?.toString() || '',
+    service_name: initialServiceName?.toString() || '',
+    booking_date: '',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -49,8 +53,12 @@ export default function CreateBooking({ initialServiceId }: CreateBookingProps) 
           full_name: '',
           phone: '',
           email: '',
-          service_id: ''
+          service_id: '',
+          service_name: '',
+          booking_date: '',
         });
+
+        onBookingSuccess?.();
       }
     } catch (error) {
       toast({
@@ -122,9 +130,14 @@ export default function CreateBooking({ initialServiceId }: CreateBookingProps) 
 
           <Select
             value={formData.service_id}
-            onValueChange={(value) =>
-              setFormData({ ...formData, service_id: value })
-            }
+            onValueChange={(value) => {
+              const selectedService = services.find((s) => s.id.toString() === value);
+              setFormData({
+                ...formData,
+                service_id: value,
+                service_name: selectedService?.title || '',
+              });
+            }}
           >
             <SelectTrigger>
               <SelectValue placeholder="Seleccionar servicio" />
@@ -132,7 +145,7 @@ export default function CreateBooking({ initialServiceId }: CreateBookingProps) 
             <SelectContent>
               {services.map((service) => (
                 <SelectItem key={service.id} value={service.id.toString()}>
-                  {service.name} - {service.price}
+                  {service.title} - {service.price}
                 </SelectItem>
               ))}
             </SelectContent>
