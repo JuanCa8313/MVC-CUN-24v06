@@ -19,7 +19,6 @@ interface Booking {
   service_name: string,
 }
 
-// Definir los tipos de documento disponibles
 const documentTypes = [
   { value: 'CC', label: 'Cédula de Ciudadanía' },
   { value: 'CE', label: 'Cédula de Extranjería' },
@@ -46,13 +45,11 @@ export default function UpdateBooking({ initialServiceId }: CreateBookingProps) 
     service_name: '',
   });
 
-  // Función para obtener el label del tipo de documento
   const getDocumentTypeLabel = (value: string) => {
     const docType = documentTypes.find(type => type.value === value);
     return docType ? docType.label : 'Seleccionar tipo de documento';
   };
 
-  // Función para obtener el nombre del servicio
   const getServiceName = (serviceId: string) => {
     const service = services.find(s => s.id.toString() === serviceId);
     return service ? `${service.title} - ${service.price}` : 'Seleccionar servicio';
@@ -72,7 +69,6 @@ export default function UpdateBooking({ initialServiceId }: CreateBookingProps) 
 
         const bookingData = await response.json();
 
-        // Update all form fields with the fetched data
         setFormData({
           id: bookingData.id,
           document_type: bookingData.document_type || 'CC',

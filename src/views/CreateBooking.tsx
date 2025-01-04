@@ -1,4 +1,3 @@
-// views/CreateBooking.tsx
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,7 +45,6 @@ export default function CreateBooking({ initialServiceId, initialServiceName, on
           title: "Reserva creada",
           description: "La reserva se ha creado exitosamente."
         });
-        // Reset form
         setFormData({
           document_type: 'CC',
           document_number: '',
