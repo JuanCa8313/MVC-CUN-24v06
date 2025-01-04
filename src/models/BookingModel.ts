@@ -15,9 +15,8 @@ export interface Booking {
 export const BookingModel = {
   async getAllBookings() {
     const [rows] = await pool.query(`
-      SELECT bookings.*, services.name as service_name 
+      SELECT bookings.* 
       FROM bookings 
-      LEFT JOIN services ON bookings.service_id = services.id
     `);
     return rows;
   },

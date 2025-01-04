@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import CreateBooking from '@/views/CreateBooking';
-import { Bed, Utensils, Dumbbell } from 'lucide-react';
+import { Bed, Utensils, Dumbbell, Bath } from 'lucide-react';
 
 interface Service {
   id: number;
@@ -43,13 +43,13 @@ const services: Service[] = [
     price: "Incluido para huéspedes",
     icon: <Dumbbell className="h-8 w-8" />
   },
-  // {
-  //   id: 4,
-  //   title: "Spa",
-  //   description: "Relájese con nuestros tratamientos de spa y masajes terapéuticos.",
-  //   price: "Desde 120.000 COP",
-  //   icon: <Spa className="h-8 w-8" />
-  // }
+  {
+    id: 4,
+    title: "Spa",
+    description: "Relájese con nuestros tratamientos de spa y masajes terapéuticos.",
+    price: "Desde 120.000 COP",
+    icon: <Bath className="h-8 w-8" />
+  }
 ];
 
 export default function ServicesPage() {
@@ -88,7 +88,7 @@ export default function ServicesPage() {
               <DialogHeader>
                 <DialogTitle>Reservar {service.title}</DialogTitle>
               </DialogHeader>
-              <CreateBooking />
+              <CreateBooking initialServiceId={service.id} />
             </DialogContent>
           </Dialog>
         ))}

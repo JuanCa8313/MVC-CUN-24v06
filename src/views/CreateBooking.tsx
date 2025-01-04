@@ -11,8 +11,13 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { services } from '@/data/services';
 
-export default function CreateBooking() {
+interface CreateBookingProps {
+  initialServiceId?: number;
+}
+
+export default function CreateBooking({ initialServiceId }: CreateBookingProps) {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     document_type: 'CC',
@@ -20,7 +25,7 @@ export default function CreateBooking() {
     full_name: '',
     phone: '',
     email: '',
-    service_id: ''
+    service_id: initialServiceId?.toString() || ''
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -114,6 +119,24 @@ export default function CreateBooking() {
               }
             />
           </div>
+
+          <Select
+            value={formData.service_id}
+            onValueChange={(value) =>
+              setFormData({ ...formData, service_id: value })
+            }
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Seleccionar servicio" />
+            </SelectTrigger>
+            <SelectContent>
+              {services.map((service) => (
+                <SelectItem key={service.id} value={service.id.toString()}>
+                  {service.name} - {service.price}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
           <Button type="submit" className="w-full">
             Crear Reserva

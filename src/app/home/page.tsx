@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import Link from "next/link";
 
 export default function HomePage() {
   return (
@@ -11,9 +12,8 @@ export default function HomePage() {
         <p className="text-lg text-muted-foreground mb-8 max-w-2xl">
           Descubra el lujo y la comodidad en nuestro hotel de cinco estrellas. Una experiencia única en el corazón de la ciudad.
         </p>
-        <Button size="lg">
-          Reservar Ahora
-        </Button>
+        <Link href="/services"><Button>Ver Servicios</Button>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
