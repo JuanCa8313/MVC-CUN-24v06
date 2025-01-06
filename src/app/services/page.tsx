@@ -8,7 +8,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import CreateBooking from '@/views/CreateBooking';
 import { Bed, Utensils, Dumbbell, Bath } from 'lucide-react';
@@ -54,10 +53,9 @@ export const services: Service[] = [
 
 export default function ServicesPage() {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleBookingSuccess = () => {
-    setIsDialogOpen(false);
+    setSelectedService(null);
   };
 
   return (
@@ -66,38 +64,48 @@ export default function ServicesPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {services.map((service) => (
-          <Dialog key={service.id} open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Card className="cursor-pointer hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-center justify-center mb-4">
-                    {service.icon}
-                  </div>
-                  <CardTitle className="text-center">{service.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-center text-gray-600">{service.description}</p>
-                </CardContent>
-                <CardFooter className="flex flex-col gap-4">
-                  <p className="text-center font-semibold">{service.price}</p>
-                  <Button
-                    className="w-full"
-                    onClick={() => setSelectedService(service)}
-                  >
-                    Reservar Ahora
-                  </Button>
-                </CardFooter>
-              </Card>
-            </DialogTrigger>
-            <DialogContent className="max-w-3xl">
-              <DialogHeader>
-                <DialogTitle>Reservar {service.title}</DialogTitle>
-              </DialogHeader>
-              <CreateBooking initialServiceId={service.id} initialServiceName={service.title} onBookingSuccess={handleBookingSuccess} />
-            </DialogContent>
-          </Dialog>
+          <Card
+            key={service.id}
+            className="cursor-pointer hover:shadow-lg transition-shadow"
+          >
+            <CardHeader>
+              <div className="flex items-center justify-center mb-4">
+                {service.icon}
+              </div>
+              <CardTitle className="text-center">{service.title}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-center text-gray-600">{service.description}</p>
+            </CardContent>
+            <CardFooter className="flex flex-col gap-4">
+              <p className="text-center font-semibold">{service.price}</p>
+              <Button
+                className="w-full"
+                onClick={() => setSelectedService(service)}
+              >
+                Reservar Ahora
+              </Button>
+            </CardFooter>
+          </Card>
         ))}
       </div>
+
+      <Dialog open={selectedService !== null} onOpenChange={(open) => !open && setSelectedService(null)}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>
+              {selectedService ? `Reservar ${selectedService.title}` : 'Reservar Servicio'}
+            </DialogTitle>
+          </DialogHeader>
+          {selectedService && (
+            <CreateBooking
+              initialServiceId={selectedService.id}
+              initialServiceName={selectedService.title}
+              onBookingSuccess={handleBookingSuccess}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
